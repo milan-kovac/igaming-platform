@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS tournaments (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    prize_pool DECIMAL(15,2) NOT NULL,
+    start_date DATETIME NOT NULL,
+    end_date DATETIME NOT NULL
+);

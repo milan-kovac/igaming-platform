@@ -1,7 +1,9 @@
 package main
 
-import "log"
+import (
+	"igaming-platform/internal/app"
+)
 
 func main() {
-	log.Println("Hello World!")
+	app.InitializeApp()
 }
