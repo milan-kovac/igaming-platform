@@ -3,6 +3,7 @@ package database
 import (
 	"fmt"
 	"igaming-platform/internal/config"
+
 	"log"
 
 	"gorm.io/driver/mysql"
