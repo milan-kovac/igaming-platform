@@ -4,6 +4,8 @@ func Initialize() {
 	connect()
 
 	migrationsUp()
+}
 
-	defer close()
+func CloseConnection() {
+	close()
 }
