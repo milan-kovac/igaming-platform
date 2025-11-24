@@ -16,12 +16,45 @@ definitions:
       status:
         type: integer
     type: object
+  player.PlayerRanking:
+    properties:
+      account_balance:
+        type: number
+      id:
+        type: integer
+      name:
+        type: string
+      player_rank:
+        type: integer
+    type: object
 info:
   contact: {}
   description: API for managing players, tournaments and prizes.
   title: iGaming Platform API
   version: "1.0"
 paths:
+  /players/ranking:
+    get:
+      description: Retrieve a ranking list of all players based on their account balances.
+      responses:
+        "200":
+          description: Player ranking fetched successfully
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.SuccessResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/player.PlayerRanking'
+                  type: array
+              type: object
+        "500":
+          description: Failed to fetch player ranking
+          schema:
+            $ref: '#/definitions/common.ErrorResponse'
+      summary: Get global player ranking
+      tags:
+      - Players
   /tournaments/{id}/distribute:
     post:
       description: Distribute prizes based on tournament ranking

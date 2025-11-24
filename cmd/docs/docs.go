@@ -15,6 +15,44 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/players/ranking": {
+            "get": {
+                "description": "Retrieve a ranking list of all players based on their account balances.",
+                "tags": [
+                    "Players"
+                ],
+                "summary": "Get global player ranking",
+                "responses": {
+                    "200": {
+                        "description": "Player ranking fetched successfully",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/common.SuccessResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/player.PlayerRanking"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Failed to fetch player ranking",
+                        "schema": {
+                            "$ref": "#/definitions/common.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/tournaments/{id}/distribute": {
             "post": {
                 "description": "Distribute prizes based on tournament ranking",
@@ -83,6 +121,23 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "status": {
+                    "type": "integer"
+                }
+            }
+        },
+        "player.PlayerRanking": {
+            "type": "object",
+            "properties": {
+                "account_balance": {
+                    "type": "number"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "player_rank": {
                     "type": "integer"
                 }
             }

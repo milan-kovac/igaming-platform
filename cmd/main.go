@@ -3,6 +3,7 @@ package main
 import (
 	"igaming-platform/internal/config"
 	"igaming-platform/internal/database"
+	"igaming-platform/internal/player"
 	"igaming-platform/internal/tournament"
 	"log"
 	"net/http"
@@ -25,8 +26,11 @@ func main() {
 
 	router := mux.NewRouter()
 
-	// tournament router
-	tournament.RegiterTournamentRouter(router)
+	// tournaments router
+	tournament.RegiterTournamentsRouter(router)
+
+	// playerss router
+	player.RegiterPlayersRouter(router)
 
 	// swagger
 	router.PathPrefix("/swagger/").Handler(httpSwagger.Handler())
