@@ -1,7 +1,9 @@
-CREATE TABLE IF NOT EXISTS tournament_players (
+CREATE TABLE IF NOT EXISTS tournament_bets (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
     tournament_id BIGINT NOT NULL,
     player_id BIGINT NOT NULL,
-    PRIMARY KEY (tournament_id, player_id),
+    bet_amount DECIMAL(20,2) NOT NULL,
+    placed_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (tournament_id) REFERENCES tournaments(id) ON DELETE CASCADE,
     FOREIGN KEY (player_id) REFERENCES players(id) ON DELETE CASCADE
 );
