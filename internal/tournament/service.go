@@ -1,23 +1,14 @@
 package tournament
 
-import (
-	"errors"
-	"igaming-platform/internal/database"
+import "fmt"
 
-	"gorm.io/gorm"
-)
-
-func DistributePrizes(tournamentId int) error {
-	var tournament Tournament
-
-	if err := database.DB.First(&tournament, tournamentId).Error; err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return errors.New("Tournament not found.")
-		}
-		return err
+func (service *tournamentService) DistributePrizes(tournamentId int) error {
+	tournament, err := service.repository.GetByID(int64(tournamentId))
+	if err != nil {
+		return fmt.Errorf("Tournament not found: %w", err)
 	}
 
-	if err := database.DB.Exec("CALL distribute_prizes(?)", tournamentId).Error; err != nil {
+	if err := service.repository.DistributePrizes(tournament.ID); err != nil {
 		return err
 	}
 

@@ -21,8 +21,9 @@ import (
 func main() {
 	env := config.LoadEnv()
 
-	// database connection
-	database.Initialize()
+	// database
+	database.Initialize(env)
+	defer database.Close()
 
 	router := mux.NewRouter()
 
@@ -40,6 +41,4 @@ func main() {
 		log.Println("Server failed to start:", err)
 	}
 
-	// close database connection
-	database.CloseConnection()
 }

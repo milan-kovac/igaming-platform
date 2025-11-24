@@ -1,25 +1,11 @@
 package player
 
-import (
-	"fmt"
-	"igaming-platform/internal/database"
-)
+import "fmt"
 
-func GetPlayersRanking() ([]PlayerRanking, error) {
-	var rankings []PlayerRanking
-
-	err := database.DB.Raw(`
-		SELECT
-			RANK() OVER (ORDER BY account_balance DESC) AS player_rank,
-			id,
-			name,
-			account_balance
-		FROM players
-	`).Scan(&rankings).Error
-
+func (service *playerService) GetPlayersRanking() ([]PlayerRanking, error) {
+	rankings, err := service.repository.GetPlayersRanking()
 	if err != nil {
-		return nil, fmt.Errorf("Failed to fetch player ranking: %w", err)
+		return nil, fmt.Errorf("Failed to get players ranking: %w", err)
 	}
-
 	return rankings, nil
 }

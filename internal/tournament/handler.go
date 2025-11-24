@@ -16,7 +16,7 @@ import (
 // @Success 200 {object} common.SuccessResponse{data=nil} "Prizes successfully distributed"
 // @Failure 400 {object} common.ErrorResponse "Bad request"
 // @Router /tournaments/{id}/distribute [post]
-func DistributePrizesHandler(w http.ResponseWriter, r *http.Request) {
+func (handler *tournamentHandler) DistributePrizesHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
 	tournamentId, parseErr := strconv.Atoi(vars["id"])
@@ -25,7 +25,7 @@ func DistributePrizesHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	distributeErr := DistributePrizes(tournamentId)
+	distributeErr := handler.service.DistributePrizes(tournamentId)
 	if distributeErr != nil {
 		common.Error(w, http.StatusNotFound, "Failed to distribute prizes", distributeErr.Error())
 		return
