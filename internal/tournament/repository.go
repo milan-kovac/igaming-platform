@@ -1,5 +1,11 @@
 package tournament
 
+import "github.com/stretchr/testify/mock"
+
+type MockTournamentRepository struct {
+	mock.Mock
+}
+
 func (repository *tournamentRepository) GetByID(id int64) (*Tournament, error) {
 	var t Tournament
 	return &t, repository.db.First(&t, id).Error
