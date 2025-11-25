@@ -1,7 +1,7 @@
-package tournament_test
+package tests
 
 import (
-	"igaming-platform/internal/tournament"
+	"igaming-platform/internal/domain"
 
 	"github.com/stretchr/testify/mock"
 )
@@ -10,10 +10,10 @@ type MockTournamentRepository struct {
 	mock.Mock
 }
 
-func (m *MockTournamentRepository) GetByID(id int64) (*tournament.Tournament, error) {
+func (m *MockTournamentRepository) GetByID(id int64) (*domain.Tournament, error) {
 	args := m.Called(id)
 	if args.Get(0) != nil {
-		return args.Get(0).(*tournament.Tournament), args.Error(1)
+		return args.Get(0).(*domain.Tournament), args.Error(1)
 	}
 	return nil, args.Error(1)
 }

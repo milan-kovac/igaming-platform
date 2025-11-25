@@ -28,7 +28,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/common.SuccessResponse"
+                                    "$ref": "#/definitions/responses.SuccessResponse"
                                 },
                                 {
                                     "type": "object",
@@ -36,7 +36,7 @@ const docTemplate = `{
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/player.PlayerRanking"
+                                                "$ref": "#/definitions/domain.PlayerRanking"
                                             }
                                         }
                                     }
@@ -47,7 +47,7 @@ const docTemplate = `{
                     "500": {
                         "description": "Failed to fetch player ranking",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/responses.ErrorResponse"
                         }
                     }
                 }
@@ -63,7 +63,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Tournament ID",
+                        "description": "Tournament id",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -75,7 +75,7 @@ const docTemplate = `{
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/common.SuccessResponse"
+                                    "$ref": "#/definitions/responses.SuccessResponse"
                                 },
                                 {
                                     "type": "object",
@@ -89,9 +89,21 @@ const docTemplate = `{
                         }
                     },
                     "400": {
-                        "description": "Bad request",
+                        "description": "Invalid tournament ID",
                         "schema": {
-                            "$ref": "#/definitions/common.ErrorResponse"
+                            "$ref": "#/definitions/responses.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Tournament not found",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ErrorResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Prizes already distributed",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ErrorResponse"
                         }
                     }
                 }
@@ -99,33 +111,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "common.ErrorResponse": {
-            "type": "object",
-            "properties": {
-                "error": {
-                    "type": "string"
-                },
-                "message": {
-                    "type": "string"
-                },
-                "status": {
-                    "type": "integer"
-                }
-            }
-        },
-        "common.SuccessResponse": {
-            "type": "object",
-            "properties": {
-                "data": {},
-                "message": {
-                    "type": "string"
-                },
-                "status": {
-                    "type": "integer"
-                }
-            }
-        },
-        "player.PlayerRanking": {
+        "domain.PlayerRanking": {
             "type": "object",
             "properties": {
                 "account_balance": {
@@ -138,6 +124,29 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "player_rank": {
+                    "type": "integer"
+                }
+            }
+        },
+        "responses.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer"
+                }
+            }
+        },
+        "responses.SuccessResponse": {
+            "type": "object",
+            "properties": {
+                "data": {},
+                "message": {
+                    "type": "string"
+                },
+                "status": {
                     "type": "integer"
                 }
             }

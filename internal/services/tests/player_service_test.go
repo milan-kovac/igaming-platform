@@ -1,8 +1,9 @@
-package player_test
+package tests
 
 import (
 	"errors"
-	"igaming-platform/internal/player"
+	"igaming-platform/internal/domain"
+	"igaming-platform/internal/services"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -10,9 +11,9 @@ import (
 
 func TestGetPlayersRanking_Success(t *testing.T) {
 	mockRepo := new(MockPlayerRepository)
-	service := player.NewPlayerService(mockRepo)
+	service := services.NewPlayerService(mockRepo)
 
-	mockRankings := []player.PlayerRanking{
+	mockRankings := []domain.PlayerRanking{
 		{PlayerRank: 1, ID: 10, Name: "Alice", AccountBalance: 500},
 		{PlayerRank: 2, ID: 11, Name: "Bob", AccountBalance: 300},
 	}
@@ -28,13 +29,13 @@ func TestGetPlayersRanking_Success(t *testing.T) {
 
 func TestGetPlayersRanking_Error(t *testing.T) {
 	mockRepo := new(MockPlayerRepository)
-	service := player.NewPlayerService(mockRepo)
+	service := services.NewPlayerService(mockRepo)
 
-	mockRepo.On("GetPlayersRanking").Return(nil, errors.New("db error"))
+	mockRepo.On("GetPlayersRanking").Return(nil, errors.New("Failed to get players ranking."))
 
 	rankings, err := service.GetPlayersRanking()
 	assert.Nil(t, rankings)
-	assert.EqualError(t, err, "Failed to get players ranking: db error")
+	assert.EqualError(t, err, "Failed to get players ranking.")
 
 	mockRepo.AssertExpectations(t)
 }
