@@ -1,22 +1,5 @@
 definitions:
-  common.ErrorResponse:
-    properties:
-      error:
-        type: string
-      message:
-        type: string
-      status:
-        type: integer
-    type: object
-  common.SuccessResponse:
-    properties:
-      data: {}
-      message:
-        type: string
-      status:
-        type: integer
-    type: object
-  player.PlayerRanking:
+  domain.PlayerRanking:
     properties:
       account_balance:
         type: number
@@ -25,6 +8,21 @@ definitions:
       name:
         type: string
       player_rank:
+        type: integer
+    type: object
+  responses.ErrorResponse:
+    properties:
+      error:
+        type: string
+      status:
+        type: integer
+    type: object
+  responses.SuccessResponse:
+    properties:
+      data: {}
+      message:
+        type: string
+      status:
         type: integer
     type: object
 info:
@@ -41,17 +39,17 @@ paths:
           description: Player ranking fetched successfully
           schema:
             allOf:
-            - $ref: '#/definitions/common.SuccessResponse'
+            - $ref: '#/definitions/responses.SuccessResponse'
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/player.PlayerRanking'
+                    $ref: '#/definitions/domain.PlayerRanking'
                   type: array
               type: object
         "500":
           description: Failed to fetch player ranking
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/responses.ErrorResponse'
       summary: Get global player ranking
       tags:
       - Players
@@ -59,7 +57,7 @@ paths:
     post:
       description: Distribute prizes based on tournament ranking
       parameters:
-      - description: Tournament ID
+      - description: Tournament id
         in: path
         name: id
         required: true
@@ -69,15 +67,23 @@ paths:
           description: Prizes successfully distributed
           schema:
             allOf:
-            - $ref: '#/definitions/common.SuccessResponse'
+            - $ref: '#/definitions/responses.SuccessResponse'
             - properties:
                 data:
                   type: object
               type: object
         "400":
-          description: Bad request
+          description: Invalid tournament ID
           schema:
-            $ref: '#/definitions/common.ErrorResponse'
+            $ref: '#/definitions/responses.ErrorResponse'
+        "404":
+          description: Tournament not found
+          schema:
+            $ref: '#/definitions/responses.ErrorResponse'
+        "409":
+          description: Prizes already distributed
+          schema:
+            $ref: '#/definitions/responses.ErrorResponse'
       summary: Distribute prizes
       tags:
       - Tournaments

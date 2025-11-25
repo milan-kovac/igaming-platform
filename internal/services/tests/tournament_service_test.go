@@ -1,8 +1,10 @@
-package tournament_test
+package tests
 
 import (
 	"errors"
-	"igaming-platform/internal/tournament"
+	"igaming-platform/internal/domain"
+	"igaming-platform/internal/services"
+	"igaming-platform/internal/shared/fallacies"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -11,9 +13,9 @@ import (
 func TestDistributePrizes_Success(t *testing.T) {
 	mockRepo := &MockTournamentRepository{}
 
-	service := tournament.NewTournamentService(mockRepo)
+	service := services.NewTournamentService(mockRepo)
 
-	tourn := &tournament.Tournament{ID: 10}
+	tourn := &domain.Tournament{ID: 10}
 
 	mockRepo.On("GetByID", int64(10)).Return(tourn, nil)
 	mockRepo.On("DistributePrizes", int64(10)).Return(nil)
@@ -27,23 +29,23 @@ func TestDistributePrizes_Success(t *testing.T) {
 func TestDistributePrizes_TournamentNotFound(t *testing.T) {
 	mockRepo := &MockTournamentRepository{}
 
-	service := tournament.NewTournamentService(mockRepo)
+	service := services.NewTournamentService(mockRepo)
 
-	mockRepo.On("GetByID", int64(10)).Return(nil, errors.New("not found"))
+	mockRepo.On("GetByID", int64(10)).Return(nil, errors.New(fallacies.TournamentNotFound.Error()))
 
 	err := service.DistributePrizes(10)
 
 	assert.Error(t, err)
-	assert.Contains(t, err.Error(), "Tournament not found")
+	assert.Contains(t, err.Error(), fallacies.TournamentNotFound.Error())
 	mockRepo.AssertExpectations(t)
 }
 
 func TestDistributePrizes_DistributeError(t *testing.T) {
 	mockRepo := &MockTournamentRepository{}
 
-	service := tournament.NewTournamentService(mockRepo)
+	service := services.NewTournamentService(mockRepo)
 
-	tourn := &tournament.Tournament{ID: 10}
+	tourn := &domain.Tournament{ID: 10}
 
 	mockRepo.On("GetByID", int64(10)).Return(tourn, nil)
 	mockRepo.On("DistributePrizes", int64(10)).Return(errors.New("db error"))
